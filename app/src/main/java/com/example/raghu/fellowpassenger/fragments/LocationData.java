@@ -18,12 +18,14 @@ import com.google.android.gms.maps.model.LatLng;
  * Created by raghu on 07/08/16.
  */
 public class LocationData {
-    String LocationName = "";
+    public String LocationName = "";
     LatLng latLng;
     public Location location;
     public float distance;
     public Context context;
     public static LocationManager mLocationManager;
+    public float nextCheck;
+    public boolean isActive = true;
 
     public LocationData(String name, LatLng l, Context cntxt) {
         LocationName = name;
@@ -66,7 +68,8 @@ public class LocationData {
             //your code here
             if (location.getAccuracy() < 100) {
                 distance = currentLocation.distanceTo(location) / 1000;
-                if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+            if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                     // TODO: Consider calling
                     //    ActivityCompat#requestPermissions
                     // here to request the missing permissions, and then overriding
@@ -82,6 +85,8 @@ public class LocationData {
             }
             Toast toast = Toast.makeText(context, location.getAccuracy() +" onLocationChanged " ,Toast.LENGTH_SHORT);
             toast.show();
+
+
         }
 
         @Override

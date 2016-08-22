@@ -3,4 +3,6 @@
     <string name="set_location">Set Location</string>
     <string name="fix_location">Fix Locoation</string>
     <string name="location">Location</string>
+    <string name="refresh">Refresh</string>
+    <string name="defLocation">Location</string>
 </resources>
