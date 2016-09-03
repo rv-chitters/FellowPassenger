@@ -1,17 +1,24 @@
-package com.example.raghu.fellowpassenger.fragments;
+package com.example.raghu.fellowpassenger;
 
 import android.Manifest;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.widget.Toast;
 
 import com.example.raghu.fellowpassenger.MainActivity;
 import com.example.raghu.fellowpassenger.R;
+import com.example.raghu.fellowpassenger.fragments.MainFragment;
 import com.google.android.gms.maps.model.LatLng;
 
 /**
@@ -66,8 +73,22 @@ public class LocationData {
         @Override
         public void onLocationChanged(final Location currentLocation) {
             //your code here
-            if (location.getAccuracy() < 100) {
+            Toast.makeText(context, Float.toString(location.getAccuracy()) , Toast.LENGTH_SHORT).show();
+            if (location.getAccuracy() < 500) {
                 distance = currentLocation.distanceTo(location) / 1000;
+
+                if(distance < 1){
+                    isActive = false;
+
+                    try {
+                        Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
+                        Ringtone r = RingtoneManager.getRingtone(context, notification);
+                        r.play();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                }
 
             if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                     // TODO: Consider calling
@@ -80,7 +101,7 @@ public class LocationData {
                     return;
                 }
                 mLocationManager.removeUpdates(mLocationListener);
-                if(MainActivity.currentFragmnet == "Main")
+                if(MainActivity.currentFragment == "Main")
                     MainActivity.fm.beginTransaction().replace(R.id.content_main,new MainFragment()).commit();
             }
             Toast toast = Toast.makeText(context, location.getAccuracy() +" onLocationChanged " ,Toast.LENGTH_SHORT);

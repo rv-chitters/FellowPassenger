@@ -4,16 +4,10 @@
 
 
     <LinearLayout
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="right|top">
-
-        <ListView
-            android:layout_width="wrap_content"
-            android:layout_height="404dp"
-            android:id="@+id/listView"
-            android:layout_gravity="center_horizontal|bottom" />
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -43,6 +37,13 @@
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentRight="true" />
         </RelativeLayout>
+
+        <ListView
+            android:layout_width="fill_parent"
+            android:layout_height="404dp"
+            android:id="@+id/listView"
+            android:layout_gravity="center_horizontal|bottom" />
+
     </LinearLayout>
 
 </FrameLayout>

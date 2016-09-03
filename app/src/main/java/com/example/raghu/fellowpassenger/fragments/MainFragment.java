@@ -11,11 +11,11 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.R.layout;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.raghu.fellowpassenger.LocationData;
 import com.example.raghu.fellowpassenger.MainActivity;
 import com.example.raghu.fellowpassenger.R;
 
@@ -63,7 +63,7 @@ public class MainFragment extends Fragment{
                 bundle.putString("searchTerm",searchTerm);
                 mp.setArguments(bundle);
                 fm.beginTransaction().replace(R.id.content_main,mp).commit();
-                MainActivity.currentFragmnet = "Map";
+                MainActivity.currentFragment = "Map";
             }
         });
 

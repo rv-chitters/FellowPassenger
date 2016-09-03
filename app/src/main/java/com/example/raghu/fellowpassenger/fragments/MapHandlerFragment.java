@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.example.raghu.fellowpassenger.LocationData;
 import com.example.raghu.fellowpassenger.MainActivity;
 import com.example.raghu.fellowpassenger.R;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -55,7 +56,7 @@ public class MapHandlerFragment extends Fragment implements OnMapReadyCallback {
                     MainActivity.locations.add(ld);
                 }
                 fm.beginTransaction().replace(R.id.content_main,mp).commit();
-                MainActivity.currentFragmnet = "Main";
+                MainActivity.currentFragment = "Main";
             }
         });
 
