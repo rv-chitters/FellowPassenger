@@ -6,6 +6,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.sqlite.SQLiteDatabase;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -31,20 +32,21 @@ public class LocationData {
     public float distance;
     public Context context;
     public static LocationManager mLocationManager;
-    public float nextCheck;
     public boolean isActive = true;
+    public SQLiteDatabase databaseReference;
 
-    public LocationData(String name, LatLng l, Context cntxt) {
+    public LocationData(String name, LatLng l, Context cont) {
         LocationName = name;
         latLng = l;
         location = new Location(name);
         location.setLatitude(l.latitude);
         location.setLongitude(l.longitude);
-        context = cntxt;
+        context = cont;
+        databaseReference = MainActivity.myDatabase;
     }
 
     public void getPosition() {
-        mLocationManager = (LocationManager) MainActivity.mLocationManager;
+        mLocationManager =  MainActivity.mLocationManager;
         if (ActivityCompat.checkSelfPermission(context, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
@@ -60,7 +62,9 @@ public class LocationData {
         Toast toast = Toast.makeText(context, LocationName + " in getPosition ", Toast.LENGTH_SHORT);
         toast.show();
         mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0,
-                0, (LocationListener) mLocationListener);
+                0,  mLocationListener);
+        mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0,
+                0,  mLocationListener);
     }
 
     @Override

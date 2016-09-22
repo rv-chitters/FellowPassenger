@@ -1,15 +1,21 @@
 package com.example.raghu.fellowpassenger.fragments;
 
+import android.annotation.TargetApi;
 import android.app.Fragment;
 import android.content.Context;
+import android.content.res.Configuration;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -26,11 +32,14 @@ import java.util.List;
  * Created by raghu on 07/08/16.
  */
 public class MainFragment extends Fragment{
+
+    public View rootView;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         //return super.onCreateView(inflater, container, savedInstanceState);
-        View rootView = inflater.inflate(R.layout.fragment_front,container,false);
+        rootView = inflater.inflate(R.layout.fragment_front,container,false);
         int id = android.R.layout.simple_list_item_1;
 
 
@@ -46,8 +55,14 @@ public class MainFragment extends Fragment{
 
         lv.setAdapter(adapter);
 
-
-
+        /*EditLocation.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                v.setFocusable(true);
+                v.setFocusableInTouchMode(true);
+                return false;
+            }
+        });*/
 
         ToMapButton.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v) {
@@ -71,7 +86,6 @@ public class MainFragment extends Fragment{
 
         return  rootView;
     }
-
 
     public class locationAdapter extends ArrayAdapter<LocationData>{
 
@@ -110,6 +124,16 @@ public class MainFragment extends Fragment{
                 }
             });
 
+            Button btn2 = (Button) convertView.findViewById(R.id.deleteButton);
+            btn2.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    MainActivity.locations.remove(position);
+                    if(MainActivity.currentFragment == "Main")
+                        MainActivity.fm.beginTransaction().replace(R.id.content_main,new MainFragment()).commit();
+                }
+            });
+
             Switch s = (Switch) convertView.findViewById(R.id.activateSwitch);
             s.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -122,6 +146,13 @@ public class MainFragment extends Fragment{
 
             return  convertView;
         }
+    }
+
+    @TargetApi(Build.VERSION_CODES.M)
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        //setContentView(R.layout.myLayout);
+        Log.d("tag","config changed");
     }
 
 }

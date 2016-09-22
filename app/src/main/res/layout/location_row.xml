@@ -34,6 +34,15 @@
             android:layout_height="50dp"
             android:layout_alignParentLeft="true"/>
 
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:text="@string/delete"
+            android:id="@+id/deleteButton"
+            android:layout_alignParentLeft="false"
+            android:layout_alignParentRight="false"
+            android:layout_centerHorizontal="true" />
+
         <Switch
             android:id="@+id/activateSwitch"
             android:enabled="true"
