@@ -7,13 +7,14 @@ import android.location.Geocoder;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.example.raghu.fellowpassenger.DataHandler;
 import com.example.raghu.fellowpassenger.LocationData;
-import com.example.raghu.fellowpassenger.MainActivity;
 import com.example.raghu.fellowpassenger.R;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -39,6 +40,8 @@ public class MapHandlerFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
+
+
         searchTerm = getArguments().getString("searchTerm");
         View rootView =   inflater.inflate(R.layout.fragment_map,container,false);
 
@@ -53,21 +56,19 @@ public class MapHandlerFragment extends Fragment implements OnMapReadyCallback {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     LocationData ld = new LocationData(searchTerm, marker.getPosition(), getContext());
                     ld.getPosition();
-                    MainActivity.locations.add(ld);
+                    DataHandler.getLocations().add(ld);
                 }
                 fm.beginTransaction().replace(R.id.content_main,mp).commit();
-                MainActivity.currentFragment = "Main";
             }
         });
-
-
-
         return rootView;
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        DataHandler.setCurrentFragment("Maps");
 
         MapFragment fragment = null;
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN_MR1) {
@@ -78,12 +79,15 @@ public class MapHandlerFragment extends Fragment implements OnMapReadyCallback {
 
     @Override
     public void onMapReady(final GoogleMap googleMap) {
+        Log.d("check",searchTerm);
         Geocoder geocoder = new Geocoder(this.getActivity().getBaseContext());
         List<Address> addresses = null;
         try {
-            // Find a maximum of 3 locations with the name Kyoto
+            // Find a maximum of 3 locations with the name
             addresses = geocoder.getFromLocationName(searchTerm, 3);
+            Log.d("check","try success");
         } catch (IOException e) {
+            Log.d("check","try fail");
             e.printStackTrace();
         }
         if (addresses != null) {

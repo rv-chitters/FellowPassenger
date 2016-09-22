@@ -21,6 +21,7 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.raghu.fellowpassenger.DataHandler;
 import com.example.raghu.fellowpassenger.LocationData;
 import com.example.raghu.fellowpassenger.MainActivity;
 import com.example.raghu.fellowpassenger.R;
@@ -39,9 +40,12 @@ public class MainFragment extends Fragment{
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         //return super.onCreateView(inflater, container, savedInstanceState);
-        rootView = inflater.inflate(R.layout.fragment_front,container,false);
-        int id = android.R.layout.simple_list_item_1;
 
+        Log.d("check","in onCreate view");
+
+        DataHandler.setCurrentFragment("Main");
+
+        rootView = inflater.inflate(R.layout.fragment_front,container,false);
 
         final Button ToMapButton = (Button) rootView.findViewById(R.id.toMapButton);
         final EditText EditLocation = (EditText) rootView.findViewById(R.id.editLocation);
@@ -50,19 +54,19 @@ public class MainFragment extends Fragment{
         ArrayAdapter<LocationData> adapter = null;
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
             //adapter = new ArrayAdapter<LocationData>(getContext(), layout.simple_list_item_1, MainActivity.locations);
-            adapter = new locationAdapter(getContext(),R.layout.location_row, MainActivity.locations);
+            adapter = new locationAdapter(getContext(),R.layout.location_row, DataHandler.getLocations());
         }
 
         lv.setAdapter(adapter);
 
-        /*EditLocation.setOnTouchListener(new View.OnTouchListener() {
+        EditLocation.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 v.setFocusable(true);
                 v.setFocusableInTouchMode(true);
                 return false;
             }
-        });*/
+        });
 
         ToMapButton.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v) {
@@ -78,10 +82,8 @@ public class MainFragment extends Fragment{
                 bundle.putString("searchTerm",searchTerm);
                 mp.setArguments(bundle);
                 fm.beginTransaction().replace(R.id.content_main,mp).commit();
-                MainActivity.currentFragment = "Map";
             }
         });
-
 
 
         return  rootView;
@@ -128,9 +130,9 @@ public class MainFragment extends Fragment{
             btn2.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    MainActivity.locations.remove(position);
-                    if(MainActivity.currentFragment == "Main")
-                        MainActivity.fm.beginTransaction().replace(R.id.content_main,new MainFragment()).commit();
+                    DataHandler.getLocations().remove(position);
+                    if(DataHandler.getCurrentFragment() == "Main")
+                        DataHandler.getFragmentManager().beginTransaction().replace(R.id.content_main,new MainFragment()).commit();
                 }
             });
 

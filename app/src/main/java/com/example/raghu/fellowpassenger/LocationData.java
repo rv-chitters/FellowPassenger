@@ -31,7 +31,6 @@ public class LocationData {
     public Location location;
     public float distance;
     public Context context;
-    public static LocationManager mLocationManager;
     public boolean isActive = true;
     public SQLiteDatabase databaseReference;
 
@@ -42,11 +41,10 @@ public class LocationData {
         location.setLatitude(l.latitude);
         location.setLongitude(l.longitude);
         context = cont;
-        databaseReference = MainActivity.myDatabase;
     }
 
     public void getPosition() {
-        mLocationManager =  MainActivity.mLocationManager;
+        LocationManager locationManager =  DataHandler.getLocationManager();
         if (ActivityCompat.checkSelfPermission(context, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
@@ -61,9 +59,9 @@ public class LocationData {
         }
         Toast toast = Toast.makeText(context, LocationName + " in getPosition ", Toast.LENGTH_SHORT);
         toast.show();
-        mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0,
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0,
                 0,  mLocationListener);
-        mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0,
+        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0,
                 0,  mLocationListener);
     }
 
@@ -104,9 +102,10 @@ public class LocationData {
                     // for ActivityCompat#requestPermissions for more details.
                     return;
                 }
-                mLocationManager.removeUpdates(mLocationListener);
-                if(MainActivity.currentFragment == "Main")
-                    MainActivity.fm.beginTransaction().replace(R.id.content_main,new MainFragment()).commit();
+                DataHandler.getLocationManager().removeUpdates(mLocationListener);
+                if(DataHandler.getCurrentFragment() == "Main"){
+                    DataHandler.getFragmentManager().beginTransaction().replace(R.id.content_main,new MainFragment()).commit();
+                }
             }
             Toast toast = Toast.makeText(context, location.getAccuracy() +" onLocationChanged " ,Toast.LENGTH_SHORT);
             toast.show();
