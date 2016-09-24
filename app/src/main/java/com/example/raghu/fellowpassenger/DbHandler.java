@@ -17,14 +17,14 @@ public class DbHandler extends SQLiteOpenHelper {
     private static final String TABLE_NAME = "locations";
     private static final String ID = "_id";
     private static final String NAME = "name";
-    private static final String LATTITUDE = "lat";
+    private static final String LATITUDE = "lat";
     private static final String LONGITUDE = "lng";
     private static final String STATUS = "status";
 
     private SQLiteDatabase database;
 
-    public DbHandler(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
-        super(context, name, factory, version);
+    public DbHandler(Context context) {
+        super(context, DBNAME, null, VERSION);
     }
 
     @Override
@@ -33,7 +33,7 @@ public class DbHandler extends SQLiteOpenHelper {
                 " (" +
                 ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 NAME + " TEXT NOT NULL, " +
-                LATTITUDE + " REAL NOT NULL, " +
+                LATITUDE + " REAL NOT NULL, " +
                 LONGITUDE + " REAL NOT NULL, " +
                 STATUS + " INTEGER NOT NULL, " +
                 ")";
@@ -60,7 +60,7 @@ public class DbHandler extends SQLiteOpenHelper {
         if(id != -1)
             contentValues.put(ID,id);
         contentValues.put(NAME,name);
-        contentValues.put(LATTITUDE,lat);
+        contentValues.put(LATITUDE,lat);
         contentValues.put(LONGITUDE,lng);
         contentValues.put(STATUS,status);
         return  database.insert(TABLE_NAME,null,contentValues);
@@ -69,7 +69,7 @@ public class DbHandler extends SQLiteOpenHelper {
     public long update(int id,String name,Double lat,Double lng,int status){
         ContentValues contentValues = new ContentValues();
         contentValues.put(NAME,name);
-        contentValues.put(LATTITUDE,lat);
+        contentValues.put(LATITUDE,lat);
         contentValues.put(LONGITUDE,lng);
         contentValues.put(STATUS,status);
         String where = ID + " = " + id;

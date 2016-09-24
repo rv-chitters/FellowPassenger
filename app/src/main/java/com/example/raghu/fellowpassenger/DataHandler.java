@@ -18,8 +18,9 @@ public class DataHandler {
     public static List<LocationData> locations = null;
     public static LocationManager locationManager = null;
     public static String currentFragment = null;
-    public static SQLiteDatabase myDatabase = null;
+    public static DbHandler dbHandler = null;
     public static FragmentManager fragmentManager = null;
+
 
     public static void initialiseLocationManager(LocationManager locManager){
         locationManager = locManager;
@@ -52,4 +53,6 @@ public class DataHandler {
     public static List<LocationData> getLocations(){
         return locations;
     }
+
+
 }

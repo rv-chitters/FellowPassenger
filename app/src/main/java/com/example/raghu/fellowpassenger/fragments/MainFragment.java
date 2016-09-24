@@ -15,7 +15,6 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -23,7 +22,6 @@ import android.widget.Toast;
 
 import com.example.raghu.fellowpassenger.DataHandler;
 import com.example.raghu.fellowpassenger.LocationData;
-import com.example.raghu.fellowpassenger.MainActivity;
 import com.example.raghu.fellowpassenger.R;
 
 import java.util.List;
@@ -118,16 +116,16 @@ public class MainFragment extends Fragment{
             loc_name.setText(locationList.get(position).LocationName);
             loc_dist.setText((int) locationList.get(position).distance + " Kms");
 
-            Button btn = (Button) convertView.findViewById(R.id.refreshButton);
-            btn.setOnClickListener(new View.OnClickListener() {
+            Button refresh = (Button) convertView.findViewById(R.id.refreshButton);
+            refresh.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     locationList.get(position).getPosition();
                 }
             });
 
-            Button btn2 = (Button) convertView.findViewById(R.id.deleteButton);
-            btn2.setOnClickListener(new View.OnClickListener() {
+            Button delete = (Button) convertView.findViewById(R.id.deleteButton);
+            delete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     DataHandler.getLocations().remove(position);
@@ -136,8 +134,8 @@ public class MainFragment extends Fragment{
                 }
             });
 
-            Switch s = (Switch) convertView.findViewById(R.id.activateSwitch);
-            s.setOnClickListener(new View.OnClickListener() {
+            Switch active  = (Switch) convertView.findViewById(R.id.activateSwitch);
+            active.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     locationList.get(position).isActive = !(locationList.get(position).isActive);
@@ -149,12 +147,4 @@ public class MainFragment extends Fragment{
             return  convertView;
         }
     }
-
-    @TargetApi(Build.VERSION_CODES.M)
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        //setContentView(R.layout.myLayout);
-        Log.d("tag","config changed");
-    }
-
 }
