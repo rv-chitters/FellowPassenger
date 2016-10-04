@@ -6,12 +6,15 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by raghu on 22/09/16.
  */
 public class DbHandler extends SQLiteOpenHelper {
 
-    private static final String DBNAME = "data.db";
+    private static final String DB_NAME = "data.db";
     private static final int VERSION = 1;
 
     private static final String TABLE_NAME = "locations";
@@ -20,11 +23,12 @@ public class DbHandler extends SQLiteOpenHelper {
     private static final String LATITUDE = "lat";
     private static final String LONGITUDE = "lng";
     private static final String STATUS = "status";
+    private static final String DISTANCE = "distance";
 
     private SQLiteDatabase database;
 
     public DbHandler(Context context) {
-        super(context, DBNAME, null, VERSION);
+        super(context, DB_NAME, null, VERSION);
     }
 
     @Override
@@ -36,6 +40,7 @@ public class DbHandler extends SQLiteOpenHelper {
                 LATITUDE + " REAL NOT NULL, " +
                 LONGITUDE + " REAL NOT NULL, " +
                 STATUS + " INTEGER NOT NULL, " +
+                DISTANCE + " REAL " +
                 ")";
         sqLiteDatabase.execSQL(queryTable);
     }
@@ -55,7 +60,8 @@ public class DbHandler extends SQLiteOpenHelper {
         }
     }
 
-    public long insert(int id,String name,Double lat,Double lng,int status){
+    public void insert(int id, String name, Double lat, Double lng, int status, Float distance){
+        this.openDB();
         ContentValues contentValues = new ContentValues();
         if(id != -1)
             contentValues.put(ID,id);
@@ -63,26 +69,63 @@ public class DbHandler extends SQLiteOpenHelper {
         contentValues.put(LATITUDE,lat);
         contentValues.put(LONGITUDE,lng);
         contentValues.put(STATUS,status);
-        return  database.insert(TABLE_NAME,null,contentValues);
+        contentValues.put(DISTANCE,distance);
+        database.insert(TABLE_NAME,null,contentValues);
+        DataHandler.loadLocationData();
+        this.closeDB();
     }
 
-    public long update(int id,String name,Double lat,Double lng,int status){
+    public void updateStatus(int id,boolean status){
+        int statusFlag = 0;
+        if(status == true){
+            statusFlag = 1;
+        }
+        this.openDB();
         ContentValues contentValues = new ContentValues();
-        contentValues.put(NAME,name);
-        contentValues.put(LATITUDE,lat);
-        contentValues.put(LONGITUDE,lng);
-        contentValues.put(STATUS,status);
+        contentValues.put(STATUS,statusFlag);
         String where = ID + " = " + id;
-        return  database.update(TABLE_NAME,contentValues,where,null);
+        database.update(TABLE_NAME,contentValues,where,null);
+        DataHandler.loadLocationData();
+        this.closeDB();
     }
 
-    public long delete(int id){
+    public void updateDistance(int id,float distance){
+        this.openDB();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(DISTANCE,distance);
         String where = ID + " = " + id;
-        return database.delete(TABLE_NAME,where,null);
+        database.update(TABLE_NAME,contentValues,where,null);
+        DataHandler.loadLocationData();
+        this.closeDB();
     }
 
-    public Cursor getAllRecords(){
+    public void delete(int id){
+        this.openDB();
+        String where = ID + " = " + id;
+        database.delete(TABLE_NAME,where,null);
+        DataHandler.loadLocationData();
+        this.closeDB();
+    }
+
+    public List<LocationData> getAllRecords(){
+        this.openDB();
+        List ls = new ArrayList();
         String query = "SELECT * FROM " + TABLE_NAME;
-        return database.rawQuery(query,null);
+        Cursor cursor =  database.rawQuery(query,null);
+        if (cursor.moveToFirst()){
+            do{
+                int id = cursor.getInt(cursor.getColumnIndex(ID));
+                String name = cursor.getString(cursor.getColumnIndex(NAME));
+                Double lat = cursor.getDouble(cursor.getColumnIndex(LATITUDE));
+                Double lng = cursor.getDouble(cursor.getColumnIndex(LONGITUDE));
+                int status = cursor.getInt(cursor.getColumnIndex(STATUS));
+                Float  distance = cursor.getFloat(cursor.getColumnIndex(DISTANCE));
+                LocationData ld = new LocationData(id,name,lat,lng,status,distance);
+                ls.add(ld);
+            }while(cursor.moveToNext());
+        }
+        cursor.close();
+        this.closeDB();
+        return ls;
     }
 }

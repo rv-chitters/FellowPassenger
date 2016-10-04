@@ -1,6 +1,6 @@
 package com.example.raghu.fellowpassenger;
 
-import android.database.sqlite.SQLiteDatabase;
+import android.content.Context;
 import android.location.LocationManager;
 import android.app.FragmentManager;
 
@@ -20,10 +20,19 @@ public class DataHandler {
     public static String currentFragment = null;
     public static DbHandler dbHandler = null;
     public static FragmentManager fragmentManager = null;
+    public static Context context = null;
 
 
     public static void initialiseLocationManager(LocationManager locManager){
         locationManager = locManager;
+    }
+
+    public static void setContext(Context context1){
+        context = context1;
+    }
+
+    public static  Context getContext(){
+        return context;
     }
 
     public static void setCurrentFragment(String fName){
@@ -51,8 +60,21 @@ public class DataHandler {
     }
 
     public static List<LocationData> getLocations(){
+        if(locations == null){
+            loadLocationData();
+        }
         return locations;
     }
 
+    public static void loadLocationData(){
+        locations = dbHandler.getAllRecords();
+    }
 
+    public static void initialiseDbHandler(Context context){
+        dbHandler = new DbHandler(context);
+    }
+
+    public static DbHandler getDbHandler(){
+        return dbHandler;
+    }
 }

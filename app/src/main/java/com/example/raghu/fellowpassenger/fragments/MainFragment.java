@@ -1,10 +1,7 @@
 package com.example.raghu.fellowpassenger.fragments;
 
-import android.annotation.TargetApi;
 import android.app.Fragment;
 import android.content.Context;
-import android.content.res.Configuration;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -18,8 +15,6 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import com.example.raghu.fellowpassenger.DataHandler;
 import com.example.raghu.fellowpassenger.LocationData;
 import com.example.raghu.fellowpassenger.R;
@@ -114,7 +109,7 @@ public class MainFragment extends Fragment{
             TextView loc_dist = (TextView) convertView.findViewById(R.id.locationDistance);
 
             loc_name.setText(locationList.get(position).LocationName);
-            loc_dist.setText((int) locationList.get(position).distance + " Kms");
+            loc_dist.setText( locationList.get(position).distance + " Kms");
 
             Button refresh = (Button) convertView.findViewById(R.id.refreshButton);
             refresh.setOnClickListener(new View.OnClickListener() {
@@ -128,18 +123,24 @@ public class MainFragment extends Fragment{
             delete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    DataHandler.getLocations().remove(position);
+                    //DataHandler.getLocations().remove(position);
+                    int id = locationList.get(position).id;
+                    DataHandler.getDbHandler().delete(id);
                     if(DataHandler.getCurrentFragment() == "Main")
                         DataHandler.getFragmentManager().beginTransaction().replace(R.id.content_main,new MainFragment()).commit();
                 }
             });
 
             Switch active  = (Switch) convertView.findViewById(R.id.activateSwitch);
+            active.setChecked(locationList.get(position).isActive);
             active.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    locationList.get(position).isActive = !(locationList.get(position).isActive);
-                    Toast.makeText(getContext(),String.valueOf(locationList.get(position).isActive) , Toast.LENGTH_SHORT).show();
+                    //locationList.get(position).isActive = !(locationList.get(position).isActive);
+                    LocationData locationData = locationList.get(position);
+                    DataHandler.getDbHandler().updateStatus(locationData.id,!(locationData.isActive));
+                    if(DataHandler.getCurrentFragment() == "Main")
+                        DataHandler.getFragmentManager().beginTransaction().replace(R.id.content_main,new MainFragment()).commit();
                 }
             });
 

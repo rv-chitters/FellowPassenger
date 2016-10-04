@@ -1,12 +1,8 @@
 package com.example.raghu.fellowpassenger;
 
 import android.Manifest;
-import android.app.AlarmManager;
-import android.app.PendingIntent;
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.database.sqlite.SQLiteDatabase;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -17,8 +13,6 @@ import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.widget.Toast;
 
-import com.example.raghu.fellowpassenger.MainActivity;
-import com.example.raghu.fellowpassenger.R;
 import com.example.raghu.fellowpassenger.fragments.MainFragment;
 import com.google.android.gms.maps.model.LatLng;
 
@@ -26,22 +20,28 @@ import com.google.android.gms.maps.model.LatLng;
  * Created by raghu on 07/08/16.
  */
 public class LocationData {
+    public int id;
     public String LocationName = "";
-    LatLng latLng;
+    public LatLng latLng;
     public Location location;
     public float distance;
     public Context context;
     public boolean isActive = true;
-    public SQLiteDatabase databaseReference;
 
-    public LocationData(String name, LatLng l, Context cont) {
-        LocationName = name;
-        latLng = l;
-        location = new Location(name);
-        location.setLatitude(l.latitude);
-        location.setLongitude(l.longitude);
-        context = cont;
+
+    public LocationData(int id,String name,Double lat,Double lng,int status,Float distance){
+        this.id = id;
+        this.LocationName = name;
+        this.latLng = new LatLng(lat,lng);
+        this.isActive = status != 0;
+        this.distance = distance;
+        context = DataHandler.getContext();
+        location = new Location(LocationName);
+        location.setLatitude(latLng.latitude);
+        location.setLongitude(latLng.longitude);
     }
+
+
 
     public void getPosition() {
         LocationManager locationManager =  DataHandler.getLocationManager();
@@ -75,10 +75,9 @@ public class LocationData {
         @Override
         public void onLocationChanged(final Location currentLocation) {
             //your code here
-            Toast.makeText(context, Float.toString(location.getAccuracy()) , Toast.LENGTH_SHORT).show();
             if (location.getAccuracy() < 500) {
                 distance = currentLocation.distanceTo(location) / 1000;
-
+                DataHandler.getDbHandler().updateDistance(id,distance);
                 if(distance < 1){
                     isActive = false;
 

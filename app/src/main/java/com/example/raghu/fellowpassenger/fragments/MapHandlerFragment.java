@@ -4,7 +4,6 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.location.Address;
 import android.location.Geocoder;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -14,7 +13,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.example.raghu.fellowpassenger.DataHandler;
-import com.example.raghu.fellowpassenger.LocationData;
 import com.example.raghu.fellowpassenger.R;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -53,11 +51,12 @@ public class MapHandlerFragment extends Fragment implements OnMapReadyCallback {
 
                 FragmentManager fm = getFragmentManager();
                 MainFragment mp = new MainFragment();
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     LocationData ld = new LocationData(searchTerm, marker.getPosition(), getContext());
                     ld.getPosition();
                     DataHandler.getLocations().add(ld);
-                }
+                }*/
+                DataHandler.getDbHandler().insert(-1,searchTerm,marker.getPosition().latitude,marker.getPosition().longitude,1, (float) -1);
                 fm.beginTransaction().replace(R.id.content_main,mp).commit();
             }
         });
