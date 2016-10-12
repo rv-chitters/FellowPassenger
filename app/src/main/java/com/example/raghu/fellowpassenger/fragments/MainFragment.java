@@ -136,7 +136,6 @@ public class MainFragment extends Fragment{
             active.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    //locationList.get(position).isActive = !(locationList.get(position).isActive);
                     LocationData locationData = locationList.get(position);
                     DataHandler.getDbHandler().updateStatus(locationData.id,!(locationData.isActive));
                     if(DataHandler.getCurrentFragment() == "Main")
