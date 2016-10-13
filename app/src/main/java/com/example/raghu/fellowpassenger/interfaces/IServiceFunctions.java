@@ -13,4 +13,6 @@ public interface IServiceFunctions {
 
     Location getLocation();
 
+    void reloadData();
+
 }

@@ -15,8 +15,9 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Switch;
 import android.widget.TextView;
-import com.example.raghu.fellowpassenger.DataHandler;
-import com.example.raghu.fellowpassenger.LocationData;
+
+import com.example.raghu.fellowpassenger.activities.ActivityDataHandler;
+import com.example.raghu.fellowpassenger.definations.LocationData;
 import com.example.raghu.fellowpassenger.R;
 
 import java.util.List;
@@ -36,7 +37,7 @@ public class MainFragment extends Fragment{
 
         Log.d("check","in onCreate view");
 
-        DataHandler.setCurrentFragment("Main");
+        ActivityDataHandler.setCurrentFragment("Main");
 
         rootView = inflater.inflate(R.layout.fragment_front,container,false);
 
@@ -47,7 +48,7 @@ public class MainFragment extends Fragment{
         ArrayAdapter<LocationData> adapter = null;
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
             //adapter = new ArrayAdapter<LocationData>(getContext(), layout.simple_list_item_1, MainActivity.locations);
-            adapter = new locationAdapter(getContext(),R.layout.location_row, DataHandler.getLocations());
+            adapter = new locationAdapter(getContext(),R.layout.location_row, ActivityDataHandler.getLocations());
         }
 
         lv.setAdapter(adapter);
@@ -123,11 +124,9 @@ public class MainFragment extends Fragment{
             delete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    //DataHandler.getLocations().remove(position);
+                    //ActivityDataHandler.getLocations().remove(position);
                     int id = locationList.get(position).id;
-                    DataHandler.getDbHandler().delete(id);
-                    if(DataHandler.getCurrentFragment() == "Main")
-                        DataHandler.getFragmentManager().beginTransaction().replace(R.id.content_main,new MainFragment()).commit();
+                    ActivityDataHandler.delete(id);
                 }
             });
 
@@ -137,9 +136,7 @@ public class MainFragment extends Fragment{
                 @Override
                 public void onClick(View view) {
                     LocationData locationData = locationList.get(position);
-                    DataHandler.getDbHandler().updateStatus(locationData.id,!(locationData.isActive));
-                    if(DataHandler.getCurrentFragment() == "Main")
-                        DataHandler.getFragmentManager().beginTransaction().replace(R.id.content_main,new MainFragment()).commit();
+                    ActivityDataHandler.updateStatus(locationData.id,!(locationData.isActive));
                 }
             });
 

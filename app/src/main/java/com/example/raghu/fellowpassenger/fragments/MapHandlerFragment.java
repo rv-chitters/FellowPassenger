@@ -12,7 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-import com.example.raghu.fellowpassenger.DataHandler;
+import com.example.raghu.fellowpassenger.activities.ActivityDataHandler;
 import com.example.raghu.fellowpassenger.R;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -54,9 +54,9 @@ public class MapHandlerFragment extends Fragment implements OnMapReadyCallback {
                 /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     LocationData ld = new LocationData(searchTerm, marker.getPosition(), getContext());
                     ld.getPosition();
-                    DataHandler.getLocations().add(ld);
+                    ActivityDataHandler.getLocations().add(ld);
                 }*/
-                DataHandler.getDbHandler().insert(-1,searchTerm,marker.getPosition().latitude,marker.getPosition().longitude,1, (float) -1);
+                ActivityDataHandler.insert(-1,searchTerm,marker.getPosition().latitude,marker.getPosition().longitude,1, (float) -1);
                 fm.beginTransaction().replace(R.id.content_main,mp).commit();
             }
         });
@@ -67,7 +67,7 @@ public class MapHandlerFragment extends Fragment implements OnMapReadyCallback {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        DataHandler.setCurrentFragment("Maps");
+        ActivityDataHandler.setCurrentFragment("Maps");
 
         MapFragment fragment = null;
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN_MR1) {
