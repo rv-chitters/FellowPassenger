@@ -49,6 +49,9 @@ public class ServiceDataHandler {
     }
 
     public static void loadLocationData(){
+        for (LocationData l:locations) {
+            l.stopThread();
+        }
         locations = dbHandler.getAllRecords();
         for (LocationData location:locations) {
             location.getPosition();

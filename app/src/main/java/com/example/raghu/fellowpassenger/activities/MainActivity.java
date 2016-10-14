@@ -79,6 +79,7 @@ public class MainActivity extends FragmentActivity {
                 String msg_for_me = intent.getStringExtra("some_msg");
                 //log our message value
                 Log.i("InchooTutorial", msg_for_me);
+                Toast.makeText(getBaseContext(),"broadcast received",Toast.LENGTH_SHORT).show();
                 ActivityDataHandler.loadLocationData();
                 if(ActivityDataHandler.getCurrentFragment() == "Main"){
                     ActivityDataHandler.getFragmentManager().beginTransaction().replace(R.id.content_main,new MainFragment()).commit();
