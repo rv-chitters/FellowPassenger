@@ -3,6 +3,7 @@ package com.example.raghu.fellowpassenger.services;
 import android.content.Context;
 import android.content.Intent;
 import android.location.LocationManager;
+import android.util.Log;
 
 import com.example.raghu.fellowpassenger.definations.DbHandler;
 import com.example.raghu.fellowpassenger.definations.LocationData;
@@ -55,6 +56,7 @@ public class ServiceDataHandler {
         locations = dbHandler.getAllRecords();
         for (LocationData location:locations) {
             location.getPosition();
+            Log.d("some_xyz","here 2");
         }
     }
 
@@ -72,6 +74,14 @@ public class ServiceDataHandler {
 
     public static void updateDistance(int id,float distance){
         dbHandler.updateDistance(id,distance);
+        Log.d("some_xyz","here 3");
+        Intent i = new Intent("android.intent.action.MAIN").putExtra("some_msg", "I will be sent!");
+        context.sendBroadcast(i);
+    }
+
+    public static void updateStatus(int id,boolean status){
+        dbHandler.updateStatus(id,status);
+        Log.d("some_xyz","here 5");
         Intent i = new Intent("android.intent.action.MAIN").putExtra("some_msg", "I will be sent!");
         context.sendBroadcast(i);
     }

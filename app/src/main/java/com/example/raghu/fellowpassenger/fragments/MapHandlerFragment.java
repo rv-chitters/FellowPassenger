@@ -31,7 +31,7 @@ import java.util.List;
 public class MapHandlerFragment extends Fragment implements OnMapReadyCallback {
 
     String searchTerm;
-    Marker marker;
+    Marker marker = null;
 
 
     @Nullable
@@ -51,12 +51,8 @@ public class MapHandlerFragment extends Fragment implements OnMapReadyCallback {
 
                 FragmentManager fm = getFragmentManager();
                 MainFragment mp = new MainFragment();
-                /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    LocationData ld = new LocationData(searchTerm, marker.getPosition(), getContext());
-                    ld.getPosition();
-                    ActivityDataHandler.getLocations().add(ld);
-                }*/
-                ActivityDataHandler.insert(-1,searchTerm,marker.getPosition().latitude,marker.getPosition().longitude,1, (float) -1);
+                if(marker != null)
+                    ActivityDataHandler.insert(-1,searchTerm,marker.getPosition().latitude,marker.getPosition().longitude,1, (float) -1);
                 fm.beginTransaction().replace(R.id.content_main,mp).commit();
             }
         });
@@ -84,9 +80,7 @@ public class MapHandlerFragment extends Fragment implements OnMapReadyCallback {
         try {
             // Find a maximum of 3 locations with the name
             addresses = geocoder.getFromLocationName(searchTerm, 3);
-            Log.d("check","try success");
         } catch (IOException e) {
-            Log.d("check","try fail");
             e.printStackTrace();
         }
         if (addresses != null) {

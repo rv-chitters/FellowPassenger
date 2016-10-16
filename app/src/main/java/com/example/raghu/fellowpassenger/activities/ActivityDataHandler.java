@@ -1,6 +1,5 @@
 package com.example.raghu.fellowpassenger.activities;
 
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.location.LocationManager;
 import android.app.FragmentManager;
